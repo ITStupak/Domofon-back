@@ -2,6 +2,7 @@ import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
 
+import addressesRouter from './routers/addresses.js'; // Імпортуємо роутер
 import { getEnvVar } from './utils/getEnvVar.js';
 
 const PORT = Number(getEnvVar('PORT', '3000'));
@@ -33,6 +34,8 @@ export const startServer = () => {
             message: 'Hello Serhii!',
         });
     });
+
+    app.use(addressesRouter); // Додаємо роутер до app як middleware
 
     //Middleware для обробки всіх не визначених роутів
     app.use('*', (req, res, next) => {
