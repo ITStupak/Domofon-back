@@ -3,7 +3,9 @@ import pino from 'pino-http';
 import cors from 'cors';
 
 import addressesRouter from './routers/addresses.js'; // Імпортуємо роутер
-import { getEnvVar } from './utils/getEnvVar.js';
+import { getEnvVar } from './utils/getEnvVar.js'; // Імпортуємо функцію, яка перевіряє наявність змінної оточення
+import { errorHandler } from './middlewares/errorHandler.js';
+import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
 const PORT = Number(getEnvVar('PORT', '3000'));
 
@@ -37,20 +39,8 @@ export const startServer = () => {
 
     app.use(addressesRouter); // Додаємо роутер до app як middleware
 
-    //Middleware для обробки всіх не визначених роутів
-    app.use('*', (req, res, next) => {
-        res.status(404).json({
-            message: 'Not found',
-        });
-    });
-
-    // Middleware для обробких помилок (приймає 4 аргументи)
-    app.use((err, req, res, next) => {
-        res.status(500).json({
-            message: 'Something went wrong',
-            error: err.message,
-        });
-    });
+    app.use('*', notFoundHandler); //Middleware для обробки всіх не визначених роутів
+    app.use(errorHandler); // Middleware для обробких помилок (приймає 4 аргументи)
 
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
