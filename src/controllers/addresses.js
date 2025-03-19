@@ -1,4 +1,4 @@
-import { getAllAddresses, getAddressById, createAddress, deleteAddress } from '../services/address.js';
+import { getAllAddresses, getAddressById, createAddress, deleteAddress, updateAddress } from '../services/address.js';
 import createHttpError from 'http-errors';
 
 export const getAddressesController = async (req, res) => {
@@ -31,6 +31,7 @@ export const getAddressByIdController = async (req, res, next,) => {
 export const createAddressController = async (req, res) => {
   const address = await createAddress(req.body);
 
+  // Відповідь, якщо нову адресу створено
   res.status(201).json({
     status: 201,
     message: `Successfully created an address!`,
@@ -43,9 +44,50 @@ export const deleteAddressController = async (req, res, next) => {
   const address = await deleteAddress(addressId);
 
   if (!address) {
-    next(createHttpError(404, 'Address not found'));
+    next(createHttpError(404, 'Address not found')); // Відповідь, якщо адресу не знайдено
     return;
   }
 
+  // Статус 204 без відповіді, якщо адресу успішно видалено
   res.status(204).send();
+};
+
+export const upsertAddressController = async (req, res, next) => {
+  const { addressId } = req.params;
+
+  const result = await updateAddress(addressId, req.body, {
+    upsert: true,
+  });
+
+  if (!result) {
+    next(createHttpError(404, 'Address not found')); // Відповідь, якщо адресу не знайдено
+    return;
+  }
+
+  const status = result.isNew ? 201 : 200;
+
+  // Відповідь, якщо адресу створено (201) або оновлено (200)
+  res.status(status).json({
+    status,
+    message: `Successfully upserted an address!`,
+    data: result.address,
+  });
+};
+
+
+export const patchAddressController = async (req, res, next) => {
+  const { addressId } = req.params;
+  const result = await updateAddress(addressId, req.body);
+
+  if (!result) {
+    next(createHttpError(404, 'Address not found')); // Відповідь, якщо адресу не знайдено
+    return;
+  }
+
+  // Відповідь, якщо адресу оновлено
+  res.json({
+    status: 200,
+    message: `Successfully patched an address!`,
+    data: result.address,
+  });
 };
