@@ -10,14 +10,16 @@ import {
 } from '../controllers/addresses.js';
 
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
+import { validateBody } from '../middlewares/validateBody.js';
+import { createAddressSchema } from '../validation/addresses.js';
 
 const router = Router();
 
 router.get('/addresses', ctrlWrapper(getAddressesController));
 router.get('/addresses/:addressId', ctrlWrapper(getAddressByIdController));
-router.post('/addresses', ctrlWrapper(createAddressController));
+router.post('/addresses', validateBody(createAddressSchema), ctrlWrapper(createAddressController));
 router.delete('/addresses/:addressId', ctrlWrapper(deleteAddressController));
-router.put('/addresses/:addressId', ctrlWrapper(upsertAddressController));
-router.patch('/addresses/:addressId', ctrlWrapper(patchAddressController));
+router.put('/addresses/:addressId', validateBody(createAddressSchema), ctrlWrapper(upsertAddressController));
+router.patch('/addresses/:addressId', validateBody(createAddressSchema), ctrlWrapper(patchAddressController));
 
 export default router;
