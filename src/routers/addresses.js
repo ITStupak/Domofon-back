@@ -11,15 +11,16 @@ import {
 
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateBody } from '../middlewares/validateBody.js';
-import { createAddressSchema } from '../validation/addresses.js';
+import { createAddressSchema, updateAddressSchema } from '../validation/addresses.js';
+import { isValidId } from '../middlewares/isValidId.js';
 
 const router = Router();
 
 router.get('/addresses', ctrlWrapper(getAddressesController));
-router.get('/addresses/:addressId', ctrlWrapper(getAddressByIdController));
+router.get('/addresses/:addressId', isValidId, ctrlWrapper(getAddressByIdController));
 router.post('/addresses', validateBody(createAddressSchema), ctrlWrapper(createAddressController));
-router.delete('/addresses/:addressId', ctrlWrapper(deleteAddressController));
-router.put('/addresses/:addressId', validateBody(createAddressSchema), ctrlWrapper(upsertAddressController));
-router.patch('/addresses/:addressId', validateBody(createAddressSchema), ctrlWrapper(patchAddressController));
+router.delete('/addresses/:addressId', isValidId, ctrlWrapper(deleteAddressController));
+router.put('/addresses/:addressId', isValidId, validateBody(updateAddressSchema), ctrlWrapper(upsertAddressController));
+router.patch('/addresses/:addressId', isValidId, validateBody(updateAddressSchema), ctrlWrapper(patchAddressController));
 
 export default router;

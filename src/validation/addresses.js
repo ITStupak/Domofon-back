@@ -30,6 +30,34 @@ export const createAddressSchema = Joi.object({
   }),
 });
 
+export const updateAddressSchema = Joi.object({
+    address: Joi.string().min(3).max(30).messages({
+    // Кастомізація повідомлення для типу "string"
+    'string.base': 'address should be a string',
+    'string.min': 'address should have at least {#limit} characters',
+    'string.max': 'aAddress should have at most {#limit} characters',
+  }),
+  number: Joi.string().min(1).max(5).messages({
+    'string.base': 'number should be a string',
+    'string.min': 'number should have at least {#limit} characters',
+    'string.max': 'number should have at most {#limit} characters',
+  }),
+  code: Joi.string().min(3).max(20).messages({
+    'string.base': 'code should be a string',
+    'string.min': 'code should have at least {#limit} characters',
+    'string.max': 'code should have at most {#limit} characters',
+  }),
+  info: Joi.string().max(30).messages({
+    'string.base': 'code should be a string',
+    'string.max': 'code should have at most {#limit} characters',
+  }),
+  comment: Joi.string().max(30).messages({
+    'string.base': 'code should be a string',
+    'string.max': 'code should have at most {#limit} characters',
+  }),
+});
+
+
 // const dataToValidate = {
 //   address: 'Stefana Zeromskiego',
 //   number: '53',
