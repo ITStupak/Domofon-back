@@ -1,8 +1,17 @@
 import { getAllAddresses, getAddressById, createAddress, deleteAddress, updateAddress } from '../services/address.js';
 import createHttpError from 'http-errors';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
 
 export const getAddressesController = async (req, res) => {
-  const addresses = await getAllAddresses();
+  const { page, perPage } = parsePaginationParams(req.query);
+  const { sortBy, sortOrder } = parseSortParams(req.query);
+  const addresses = await getAllAddresses({
+    page,
+    perPage,
+    sortBy,
+    sortOrder,
+  });
 
   res.json({
     status: 200,
