@@ -1,4 +1,4 @@
-import { getAllAddresses, getAddressById, createAddress, deleteAddress, updateAddress } from '../services/address.js';
+import { getAllAddresses, getAddressById, createAddress, deleteAddress, updateAddress } from '../services/addresses.js';
 import createHttpError from 'http-errors';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';

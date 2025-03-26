@@ -1,4 +1,4 @@
-import { AddressesSchemaCollection } from '../db/models/address.js';
+import { MainAddress } from '../db/models/addresses.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 import { SORT_ORDER } from '../constants/index.js';
 
@@ -11,8 +11,8 @@ export const getAllAddresses = async ({
   const limit = perPage;
   const skip = (page - 1) * perPage;
 
-  const addressesQuery = AddressesSchemaCollection.find();
-  const addressesCount = await AddressesSchemaCollection.find()
+  const addressesQuery = MainAddress.find();
+  const addressesCount = await MainAddress.find()
     .merge(addressesQuery)
     .countDocuments();
 
@@ -31,24 +31,24 @@ export const getAllAddresses = async ({
 };
 
 export const getAddressById = async (addressId) => {
-  const address = await AddressesSchemaCollection.findById(addressId);
+  const address = await MainAddress.findById(addressId);
   return address;
 };
 
 export const createAddress = async (payload) => {
-  const address = await AddressesSchemaCollection.create(payload);
+  const address = await MainAddress.create(payload);
   return address;
 };
 
 export const deleteAddress = async (addressId) => {
-  const address = await AddressesSchemaCollection.findOneAndDelete({
+  const address = await MainAddress.findOneAndDelete({
     _id: addressId,
   });
   return address;
 };
 
 export const updateAddress = async (addressId, payload, options = {}) => {
-  const rawResult = await AddressesSchemaCollection.findOneAndUpdate(
+  const rawResult = await MainAddress.findOneAndUpdate(
     { _id: addressId },
     payload,
     {

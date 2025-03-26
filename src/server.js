@@ -2,10 +2,11 @@ import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
 
-import addressesRouter from './routers/addresses.js'; // Імпортуємо роутер
+import router from './routers/index.js'; // Імпортуємо роутер
 import { getEnvVar } from './utils/getEnvVar.js'; // Імпортуємо функцію, яка перевіряє наявність змінної оточення
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
+import cookieParser from 'cookie-parser';
 
 const PORT = Number(getEnvVar('PORT', '3000'));
 
@@ -14,6 +15,7 @@ export const startServer = () => {
 
     app.use(express.json());
     app.use(cors()); //Пакет CORS (Cross-Origin Resource Sharing) як Middleware
+    app.use(cookieParser()); //Middleware для роботи із куками
 
     //Middleware для логування
     app.use(
@@ -37,7 +39,7 @@ export const startServer = () => {
         });
     });
 
-    app.use(addressesRouter); // Додаємо роутер до app як middleware
+    app.use(router); // Додаємо роутер до app як middleware
 
     app.use('*', notFoundHandler); //Middleware для обробки всіх не визначених роутів
     app.use(errorHandler); // Middleware для обробких помилок (приймає 4 аргументи)

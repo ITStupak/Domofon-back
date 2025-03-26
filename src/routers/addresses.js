@@ -16,11 +16,11 @@ import { isValidId } from '../middlewares/isValidId.js';
 
 const router = Router();
 
-router.get('/addresses', ctrlWrapper(getAddressesController));
-router.get('/addresses/:addressId', isValidId, ctrlWrapper(getAddressByIdController));
-router.post('/addresses', validateBody(createAddressSchema), ctrlWrapper(createAddressController));
-router.delete('/addresses/:addressId', isValidId, ctrlWrapper(deleteAddressController));
-router.put('/addresses/:addressId', isValidId, validateBody(updateAddressSchema), ctrlWrapper(upsertAddressController));
-router.patch('/addresses/:addressId', isValidId, validateBody(updateAddressSchema), ctrlWrapper(patchAddressController));
+router.get('/', ctrlWrapper(getAddressesController));
+router.get('/:addressId', isValidId, ctrlWrapper(getAddressByIdController));
+router.post('/', validateBody(createAddressSchema), ctrlWrapper(createAddressController));
+router.delete('/:addressId', isValidId, ctrlWrapper(deleteAddressController));
+router.put('/:addressId', isValidId, validateBody(updateAddressSchema), ctrlWrapper(upsertAddressController));
+router.patch('/:addressId', isValidId, validateBody(updateAddressSchema), ctrlWrapper(patchAddressController));
 
 export default router;
