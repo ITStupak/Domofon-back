@@ -13,8 +13,11 @@ import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { createAddressSchema, updateAddressSchema } from '../validation/addresses.js';
 import { isValidId } from '../middlewares/isValidId.js';
+import { authenticate } from '../middlewares/authenticate.js';
 
 const router = Router();
+
+router.use(authenticate);
 
 router.get('/', ctrlWrapper(getAddressesController));
 router.get('/:addressId', isValidId, ctrlWrapper(getAddressByIdController));
